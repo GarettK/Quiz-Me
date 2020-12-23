@@ -1,4 +1,4 @@
-package edu.utap.quiz_me.ui.home
+package edu.utap.quiz_me.UI
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

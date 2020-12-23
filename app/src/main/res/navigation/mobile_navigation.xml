@@ -7,19 +7,17 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="edu.utap.quiz_me.ui.home.HomeFragment"
+        android:name="edu.utap.quiz_me.UI.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_game_Screen"
+            app:destination="@id/game_Screen" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="edu.utap.quiz_me.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="edu.utap.quiz_me.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/game_Screen"
+        android:name="edu.utap.quiz_me.UI.Game_Screen"
+        android:label="fragment_game__screen"
+        tools:layout="@layout/fragment_game_screen" />
 </navigation>
