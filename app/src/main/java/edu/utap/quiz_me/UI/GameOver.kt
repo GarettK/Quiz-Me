@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
+import edu.utap.quiz_me.MainViewModel
 import edu.utap.quiz_me.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,6 +25,7 @@ class GameOver : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,7 @@ class GameOver : Fragment() {
 
         val playAgain = requireActivity().findViewById<Button>(R.id.Play_Again_Button)
         playAgain.setOnClickListener {
+            viewModel.getQuestion()
             navController.navigate(R.id.action_gameOver_to_game_Screen)
         }
 

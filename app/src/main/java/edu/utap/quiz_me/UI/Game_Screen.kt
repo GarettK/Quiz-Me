@@ -1,13 +1,19 @@
 package edu.utap.quiz_me.UI
 
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
+import edu.utap.quiz_me.MainViewModel
 import edu.utap.quiz_me.R
+import edu.utap.quiz_me.api.TriviaQuestion
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +29,7 @@ class Game_Screen : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +47,25 @@ class Game_Screen : Fragment() {
         return inflater.inflate(R.layout.fragment_game_screen, container, false)
     }
 
+    private fun fromHtml(encodedQuestion: String): String {
+        return Html.fromHtml(encodedQuestion, Html.FROM_HTML_MODE_LEGACY).toString()
+    }
+
+    private fun initObserver() {
+        viewModel.observeQuestion().observe(viewLifecycleOwner, {
+            if (it != null) {
+                val encodedQuestion = it.question
+                val cleanedQuestion = fromHtml(encodedQuestion)
+                val questionText = requireActivity().findViewById<TextView>(R.id.Question_Text)
+                questionText.text = cleanedQuestion
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initObserver()
 
         val navHostFragment =
                 requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

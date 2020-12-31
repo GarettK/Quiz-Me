@@ -68,6 +68,7 @@
             android:id="@+id/Question_Text"
             android:text="This is a question. And it just goes on and on and on and on."
             android:textAlignment="center"
+            android:textSize="24sp"
             android:layout_margin="15dp"/>
     </androidx.cardview.widget.CardView>
 
