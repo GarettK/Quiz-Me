@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -27,8 +24,19 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    private fun initObservers() {
+        viewModel.observeMaxHighscore().observe(viewLifecycleOwner, {
+            if (it != null) {
+                val maxHighscoreText = requireActivity().findViewById<TextView>(R.id.Highscore_Amount)
+                maxHighscoreText.text = it.toString()
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initObservers()
 
         val spinner = requireActivity().findViewById<Spinner>(R.id.Difficulty_Spinner)
         val spinnerItems = resources.getStringArray(R.array.spinner_items)
@@ -50,6 +58,7 @@ class HomeFragment : Fragment() {
         val navHostFragment =
                 requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
+
         val startButton = requireActivity().findViewById<Button>(R.id.Start_Button)
         startButton.setOnClickListener {
             viewModel.getQuestion()

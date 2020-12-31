@@ -13,26 +13,49 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class MainViewModel : ViewModel() {
-    private var difficultyLevel = "Easy"
+    private var difficulty = MutableLiveData<String>()
     private var question = MutableLiveData<TriviaQuestion>()
     private val triviaApi = TriviaApi.create()
     private val repository = Repository(triviaApi)
     private var token: String = "" // API uses this token to ensure no duplicate questions to the same user
+    private var maxHighscore = MutableLiveData(0)
+    private var currentHighscore = MutableLiveData(0)
 
     init {
         getToken()
+        difficulty.value = "easy"
+    }
+
+    //Set Difficulty, MaxHighscore, CurrentHighscore section////////////////////
+    fun setMaxHighscore() {
+        if (currentHighscore.value!! > maxHighscore.value!!) {
+            maxHighscore.value = currentHighscore.value
+        }
+    }
+
+    fun incrementCurrentHighscore(incrementAmount: Int) {
+        currentHighscore.value = currentHighscore.value?.plus(incrementAmount) ?: incrementAmount
+        val value = currentHighscore.value
+        currentHighscore.value = value
+        Log.d(javaClass.simpleName, "currentHighscore ${currentHighscore.value}")
+    }
+
+    fun resetCurrentHighscore() {
+        currentHighscore.value = 0
     }
 
     fun setDifficulty(level: String) {
-        difficultyLevel = when(level.toLowerCase(Locale.getDefault())) {
+        difficulty.value = when(level.toLowerCase(Locale.getDefault())) {
             "easy" -> "easy"
             "medium" -> "medium"
             "hard" -> "hard"
             else -> "medium"
         }
-        Log.d(javaClass.simpleName, "level $level / difficulty $difficultyLevel")
+        Log.d(javaClass.simpleName, "level $level / difficulty $difficulty")
     }
 
+
+    //Network GET Requests//////////////////////////
     private fun getToken() {
         viewModelScope.launch (
             context = viewModelScope.coroutineContext + Dispatchers.IO) {
@@ -44,12 +67,25 @@ class MainViewModel : ViewModel() {
     fun getQuestion() {
         viewModelScope.launch(
             context = viewModelScope.coroutineContext + Dispatchers.IO) {
-            question.postValue(repository.getQuestion(difficultyLevel, token))
+            question.postValue(repository.getQuestion(difficulty.value!!, token))
             Log.d(javaClass.simpleName, "question ${question.value}")
         }
     }
 
+    //Observe Section////////////////////////////
     fun observeQuestion(): LiveData<TriviaQuestion> {
         return question
+    }
+
+    fun observeDifficulty(): LiveData<String> {
+        return difficulty
+    }
+
+    fun observeCurrentHighscore(): LiveData<Int> {
+        return currentHighscore
+    }
+
+    fun observeMaxHighscore(): LiveData<Int> {
+        return maxHighscore
     }
 }

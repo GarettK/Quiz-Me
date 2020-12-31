@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import edu.utap.quiz_me.MainViewModel
 import edu.utap.quiz_me.R
+import org.w3c.dom.Text
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,8 +43,26 @@ class GameOver : Fragment() {
         return inflater.inflate(R.layout.fragment_game_over, container, false)
     }
 
+    private fun initObservers() {
+        viewModel.observeCurrentHighscore().observe(viewLifecycleOwner, {
+            if (it != null) {
+                val newHighscoreText = requireActivity().findViewById<TextView>(R.id.New_Highscore_Amount)
+                newHighscoreText.text = it.toString()
+            }
+        })
+
+        viewModel.observeMaxHighscore().observe(viewLifecycleOwner, {
+            if (it != null) {
+                val oldHighscoreText = requireActivity().findViewById<TextView>(R.id.Old_Highscore_Amount)
+                oldHighscoreText.text = it.toString()
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initObservers()
 
         val navHostFragment =
                 requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -52,11 +72,15 @@ class GameOver : Fragment() {
         playAgain.setOnClickListener {
             viewModel.getQuestion()
             navController.navigate(R.id.action_gameOver_to_game_Screen)
+            viewModel.setMaxHighscore()
+            viewModel.resetCurrentHighscore()
         }
 
         val homeButton = requireActivity().findViewById<Button>(R.id.Home_Button)
         homeButton.setOnClickListener {
             navController.navigate(R.id.action_gameOver_to_navigation_home)
+            viewModel.setMaxHighscore()
+            viewModel.resetCurrentHighscore()
         }
 
     }

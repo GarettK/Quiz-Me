@@ -1,6 +1,5 @@
 package edu.utap.quiz_me.UI
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import androidx.fragment.app.Fragment
@@ -14,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import edu.utap.quiz_me.MainViewModel
 import edu.utap.quiz_me.R
 import edu.utap.quiz_me.api.TriviaQuestion
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +30,8 @@ class Game_Screen : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private val viewModel: MainViewModel by activityViewModels()
+    private var scoreAmount: Int = 10
+    private lateinit var triviaQuestion: TriviaQuestion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,36 @@ class Game_Screen : Fragment() {
         return inflater.inflate(R.layout.fragment_game_screen, container, false)
     }
 
+    private fun setupButtons() {
+        val trueButton = requireActivity().findViewById<Button>(R.id.True_Button)
+        val falseButton = requireActivity().findViewById<Button>(R.id.False_Button)
+        val navHostFragment =
+                requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        if (triviaQuestion.correctAnswer) {
+            trueButton.setOnClickListener {
+                viewModel.incrementCurrentHighscore(scoreAmount)
+                viewModel.getQuestion()
+                //Success Animation
+            }
+            falseButton.setOnClickListener {
+                //End round
+                navController.navigate(R.id.action_game_Screen_to_gameOver)
+            }
+        } else {
+            trueButton.setOnClickListener {
+                //End round
+                navController.navigate(R.id.action_game_Screen_to_gameOver)
+            }
+            falseButton.setOnClickListener {
+                viewModel.incrementCurrentHighscore(scoreAmount)
+                viewModel.getQuestion()
+                //Success Animation
+            }
+        }
+    }
+
     private fun fromHtml(encodedQuestion: String): String {
         return Html.fromHtml(encodedQuestion, Html.FROM_HTML_MODE_LEGACY).toString()
     }
@@ -54,10 +86,43 @@ class Game_Screen : Fragment() {
     private fun initObserver() {
         viewModel.observeQuestion().observe(viewLifecycleOwner, {
             if (it != null) {
-                val encodedQuestion = it.question
-                val cleanedQuestion = fromHtml(encodedQuestion)
+                triviaQuestion = it
+                val cleanedQuestion = fromHtml(triviaQuestion.question)
                 val questionText = requireActivity().findViewById<TextView>(R.id.Question_Text)
                 questionText.text = cleanedQuestion
+
+                setupButtons()
+            }
+        })
+
+        viewModel.observeDifficulty().observe(viewLifecycleOwner, {
+            if(it != null) {
+                val difficultyText = requireActivity().findViewById<TextView>(R.id.GameScreen_Difficulty)
+                when(it.toLowerCase(Locale.getDefault())) {
+                    "easy" -> {
+                        scoreAmount = 10
+                        difficultyText.text = "Easy"
+                    }
+                    "medium" -> {
+                        scoreAmount = 20
+                        difficultyText.text = "Medium"
+                    }
+                    "hard" -> {
+                        scoreAmount = 30
+                        difficultyText.text = "Hard"
+                    }
+                    else -> {
+                        scoreAmount = 20
+                        difficultyText.text = "Medium"
+                    }
+                }
+            }
+        })
+
+        viewModel.observeCurrentHighscore().observe(viewLifecycleOwner, {
+            if (it != null) {
+                val currentHighscoreText = requireActivity().findViewById<TextView>(R.id.GameScreen_Highscore_Amount)
+                currentHighscoreText.text = it.toString()
             }
         })
     }
@@ -67,13 +132,6 @@ class Game_Screen : Fragment() {
 
         initObserver()
 
-        val navHostFragment =
-                requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val trueButton = requireActivity().findViewById<Button>(R.id.True_Button)
-        trueButton.setOnClickListener {
-            navController.navigate(R.id.action_game_Screen_to_gameOver)
-        }
     }
 
     companion object {
