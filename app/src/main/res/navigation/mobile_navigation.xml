@@ -19,5 +19,21 @@
         android:id="@+id/game_Screen"
         android:name="edu.utap.quiz_me.UI.Game_Screen"
         android:label="fragment_game__screen"
-        tools:layout="@layout/fragment_game_screen" />
+        tools:layout="@layout/fragment_game_screen" >
+        <action
+            android:id="@+id/action_game_Screen_to_gameOver"
+            app:destination="@id/gameOver" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameOver"
+        android:name="edu.utap.quiz_me.UI.GameOver"
+        android:label="fragment_game_over"
+        tools:layout="@layout/fragment_game_over" >
+        <action
+            android:id="@+id/action_gameOver_to_game_Screen"
+            app:destination="@id/game_Screen" />
+        <action
+            android:id="@+id/action_gameOver_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 </navigation>
