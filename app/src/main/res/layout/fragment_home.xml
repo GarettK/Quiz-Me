@@ -4,32 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.HomeFragment">
+    tools:context=".UI.HomeFragment"
+    android:padding="30dp">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/GameScreen_Highscore_Card"
         app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        android:layout_margin="20dp">
-        <TextView
-            android:id="@+id/Highscore_Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:text="Highscore:"
-            android:textStyle="bold"
-            android:layout_marginEnd="10dp"/>
-        <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="10dp">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/Highscore_Amount"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="50"/>
-    </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
+            android:layout_margin="15dp">
+
+            <TextView
+                android:id="@+id/Highscore_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/abril_fatface"
+                android:text="Highscore:"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/Highscore_Amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abril_fatface"
+                android:text="50"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
@@ -48,30 +61,32 @@
             android:layout_margin="20dp">
 
             <TextView
+                android:id="@+id/Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/Title"
-                android:textSize="64sp"
-                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/abril_fatface"
                 android:text="Quiz Me"
                 android:textAlignment="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="64sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/Start_Button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"
-                android:layout_marginBottom="8dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <Button
+                android:id="@+id/Start_Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/Start_Button"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/happy_monkey"
                 android:text="Start"
                 app:layout_constraintBottom_toTopOf="@+id/Difficulty_Spinner"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Title"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginBottom="8dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Title" />
 
             <Spinner
                 android:layout_width="wrap_content"

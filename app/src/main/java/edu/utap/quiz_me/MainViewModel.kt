@@ -88,4 +88,13 @@ class MainViewModel : ViewModel() {
     fun observeMaxHighscore(): LiveData<Int> {
         return maxHighscore
     }
+
+    //Observe Once (Get)/////////////////////
+    fun getMaxHighscore(): Int {
+        return maxHighscore.value!!
+    }
+
+    fun getcurrentHighscore(): Int {
+        return currentHighscore.value!!
+    }
 }
