@@ -44,13 +44,13 @@ class MainActivity : AppCompatActivity() {
         editor.apply {
             putInt(SAVE_KEY, newScore)
         }.apply()
-        Log.d("HELP!", "SAVED!!!!!!!!!!!!")
+        //Log.d("HELP!", "SAVED!!!!!!!!!!!!")
     }
 
     private fun loadHighscore() {
         val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val savedScore: Int = sharedPreferences.getInt(SAVE_KEY, 0)
         viewModel.loadOldHighscore(savedScore)
-        Log.d("HELP!", "LoadHighscore Called!")
+        //Log.d("HELP!", "LoadHighscore Called!")
     }
 }
