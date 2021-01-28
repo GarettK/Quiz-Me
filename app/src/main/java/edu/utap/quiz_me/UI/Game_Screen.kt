@@ -85,12 +85,16 @@ class Game_Screen : Fragment() {
     private fun setupButtons() {
         val trueButton = requireActivity().findViewById<Button>(R.id.True_Button)
         val falseButton = requireActivity().findViewById<Button>(R.id.False_Button)
+        trueButton.isClickable = true
+        falseButton.isClickable = true
+
         val navHostFragment =
                 requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
         if (triviaQuestion.correctAnswer) {
             trueButton.setOnClickListener {
+                trueButton.isClickable = false
                 correctAnimation()
                 viewModel.incrementCurrentHighscore(scoreAmount)
                 pointIncreaseAnimation()
@@ -100,6 +104,7 @@ class Game_Screen : Fragment() {
                 }
             }
             falseButton.setOnClickListener {
+                falseButton.isClickable = false
                 //End round
                 incorrectAnimation()
                 GlobalScope.launch(Dispatchers.IO) {
@@ -109,6 +114,7 @@ class Game_Screen : Fragment() {
             }
         } else {
             trueButton.setOnClickListener {
+                trueButton.isClickable = false
                 //End round
                 incorrectAnimation()
                 GlobalScope.launch(Dispatchers.IO) {
@@ -117,6 +123,7 @@ class Game_Screen : Fragment() {
                 }
             }
             falseButton.setOnClickListener {
+                falseButton.isClickable = false
                 correctAnimation()
                 viewModel.incrementCurrentHighscore(scoreAmount)
                 pointIncreaseAnimation()

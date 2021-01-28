@@ -1,5 +1,7 @@
 package edu.utap.quiz_me
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +26,11 @@ class MainViewModel : ViewModel() {
     init {
         getToken()
         difficulty.value = "easy"
+    }
+
+    // Load Old Highscore Section////////////////
+    fun loadOldHighscore(oldScore: Int) {
+        maxHighscore.value = oldScore
     }
 
     //Set Difficulty, MaxHighscore, CurrentHighscore section////////////////////
@@ -89,7 +96,7 @@ class MainViewModel : ViewModel() {
         return maxHighscore
     }
 
-    //Observe Once (Get)/////////////////////
+    //Observe Once (Get) Section/////////////////////
     fun getMaxHighscore(): Int {
         return maxHighscore.value!!
     }

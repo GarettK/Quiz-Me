@@ -1,20 +1,17 @@
 package edu.utap.quiz_me.UI
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
+import edu.utap.quiz_me.MainActivity
 import edu.utap.quiz_me.MainViewModel
 import edu.utap.quiz_me.R
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 
 class GameOver : Fragment() {
@@ -35,10 +32,17 @@ class GameOver : Fragment() {
         oldHighscoreText.text = viewModel.getMaxHighscore().toString()
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Read score values from viewModel and put into text views
         getHighscoreValues()
+        // Update max highscore if the new one is bigger. RESET current score to 0.
+        viewModel.setMaxHighscore()
+        viewModel.resetCurrentHighscore()
+        // Save max highscore to sharedPreferences
+        (activity as MainActivity).saveHighscore(viewModel.getMaxHighscore())
 
         val navHostFragment =
                 requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -49,15 +53,11 @@ class GameOver : Fragment() {
         playAgain.setOnClickListener {
             viewModel.getQuestion()
             navController.navigate(R.id.action_gameOver_to_game_Screen)
-            viewModel.setMaxHighscore()
-            viewModel.resetCurrentHighscore()
         }
 
         val homeButton = requireActivity().findViewById<Button>(R.id.Home_Button)
         homeButton.setOnClickListener {
             navController.navigate(R.id.action_gameOver_to_navigation_home)
-            viewModel.setMaxHighscore()
-            viewModel.resetCurrentHighscore()
         }
     }
 }
